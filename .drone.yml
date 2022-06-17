@@ -14,10 +14,6 @@ steps:
        - go version
        - ls
        - go build -o app main.go
-       - rm -rf *
-       - cp app ./app
-       - cp Dockerfile ./Dockerfile
-       - cp run.sh ./run.sh #上述步骤完成构建
   -  name: build-start
      image: appleboy/drone-ssh # SSH工具镜像
      settings:
