@@ -16,8 +16,6 @@ steps:
        - go build -o app main.go
        - ls
        - pwd
-       - cd /goPrivateProxy
-       - ls
        - rm -rf /goPrivateProxy
        - mkdir /goPrivateProxy
        - cp app /goPrivateProxy/app
