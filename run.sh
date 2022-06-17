@@ -2,7 +2,7 @@
 # 定义应用组名
 group_name='golang'
 #定义应用名称
-app_name='goPrivateProxy'
+app_name='go-private-proxy'
 echo ${app_name}
 echo '----copy app----'
 docker stop ${app_name}
