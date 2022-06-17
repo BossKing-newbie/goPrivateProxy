@@ -35,6 +35,6 @@ steps:
          - chmod +x run.sh # 更改为可执行脚本
          - ./run.sh # 运行脚本打包应用镜像并运行
 volumes: # 定义流水线挂载目录，用于共享数据
-  - name: bulid-workspace
+  - name: build-workspace
     host:
       path: /mydata/goPrivateProxy # 从宿主机中挂载的目录
