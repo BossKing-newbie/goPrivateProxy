@@ -15,7 +15,7 @@ steps:
        - ls
        - go build -o app main.go
        - rm -rf /goPrivateProxy/appStore
-       - mkdir /goPrivateProxy/appStore
+       - mkdir -p /goPrivateProxy/appStore
        - cp app /goPrivateProxy/appStore/app
        - cp Dockerfile /goPrivateProxy/appStore/Dockerfile
        - cp run.sh /goPrivateProxy/appStore/run.sh
