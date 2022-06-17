@@ -14,11 +14,15 @@ steps:
        - go version
        - ls
        - go build -o app main.go
-       - rm -rf /goPrivateProxy/appStore
-       - mkdir -p /goPrivateProxy/appStore
-       - cp app /goPrivateProxy/appStore/app
-       - cp Dockerfile /goPrivateProxy/appStore/Dockerfile
-       - cp run.sh /goPrivateProxy/appStore/run.sh
+       - ls
+       - pwd
+       - cd /goPrivateProxy
+       - ls
+       - rm -rf /goPrivateProxy
+       - mkdir /goPrivateProxy
+       - cp app /goPrivateProxy/app
+       - cp run.sh /goPrivateProxy/run.sh
+       - cp Dockerfile /goPrivateProxy/Dockerfile
   -  name: build-start
      image: appleboy/drone-ssh # SSH工具镜像
      settings:
@@ -29,7 +33,7 @@ steps:
        port: 22 # 远程连接端口
        command_timeout: 5m # 远程执行命令超时时间
        script:
-         - cd /mydata/goPrivateProxy/appStore
+         - cd /mydata/goPrivateProxy
          - chmod +x run.sh # 更改为可执行脚本
          - ./run.sh # 运行脚本打包应用镜像并运行
 volumes: # 定义流水线挂载目录，用于共享数据
