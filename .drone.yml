@@ -16,8 +16,6 @@ steps:
        - go build -o app main.go
        - ls
        - pwd
-       - rm -rf /goPrivateProxy
-       - mkdir /goPrivateProxy
        - cp app /goPrivateProxy/app
        - cp run.sh /goPrivateProxy/run.sh
        - cp Dockerfile /goPrivateProxy/Dockerfile
