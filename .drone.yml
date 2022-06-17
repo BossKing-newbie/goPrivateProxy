@@ -1,0 +1,38 @@
+kind: pipeline # 定义对象类型，还有secret和signature两种类型
+type: docker # 定义流水线类型，还有kubernetes、exec、ssh等类型
+name: goPrivateProxy
+steps:
+  -  name: package
+     image: golang:1.16
+     volumes:
+       - name: build-workspace
+         path: /goPrivateProxy
+     commands:
+       - cd /drone/src
+       - go env -w GOPROXY=https://goproxy.cn
+       - go mod tidy
+       - go version
+       - cd goPrivateProxy
+       - go build -o app main.go
+       - rm -rf /goPrivateProxy/app
+       - mkdir /goPrivateProxy/app
+       - cp app /goPrivateProxy/app
+       - cp Dockerfile /goPrivatePorxy/Dockerfile
+       - cp run.sh /goPrivatePorxy/run.sh #上述步骤完成构建
+  -  name: build-start
+     image: appleboy/drone-ssh # SSH工具镜像
+     settings:
+       host: 121.196.150.116 # 远程连接地址
+       username: root # 远程连接账号
+       password:
+         from_secret: ssh_password # 从Secret中读取SSH密码
+       port: 22 # 远程连接端口
+       command_timeout: 5m # 远程执行命令超时时间
+       script:
+         - cd /mydata/goPrivateProxy
+         - chmod +x run.sh # 更改为可执行脚本
+         - ./run.sh # 运行脚本打包应用镜像并运行
+volumes: # 定义流水线挂载目录，用于共享数据
+  - name: bulid-workspace
+    host:
+      path: /mydata/goPrivateProxy # 从宿主机中挂载的目录

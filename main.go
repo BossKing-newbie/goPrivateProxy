@@ -17,5 +17,5 @@ func main() {
 			"sum.golang.org https://goproxy.cn/sumdb/sum.golang.org", // 代理默认的校验和数据库
 		},
 	}))
-	_ = r.Run(":8080")
+	_ = r.Run(":8138")
 }
