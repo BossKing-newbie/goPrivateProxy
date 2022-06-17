@@ -14,7 +14,7 @@ func main() {
 			"message": "pong",
 		})
 	})
-	_ = http.ListenAndServe("localhost:8138", &goproxy.Goproxy{
+	_ = http.ListenAndServe(":8138", &goproxy.Goproxy{
 		GoBinEnv: append(
 			os.Environ(),
 			"GOPROXY=https://goproxy.cn,direct", // 使用 Goproxy.cn 作为上游代理
