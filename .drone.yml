@@ -10,6 +10,7 @@ steps:
      commands:
        - cd /drone/src
        - go env -w GOPROXY=https://goproxy.cn
+       - go env -w GO111MODULE=on
        - go mod tidy
        - go version
        - ls
