@@ -12,7 +12,7 @@ echo '----rm container----'
 # 打包编译docker镜像
 docker build -t ${group_name}/${app_name} .
 #构建docker应用
-docker run -p 8138:8138 --add-host=http://github.com:20.205.243.166 \
+docker run -p 8138:8138 --add-host=github.com:20.205.243.166 \
 --name ${app_name} \
 -e TZ="Asia/Shanghai" \
 -d ${group_name}/${app_name}
