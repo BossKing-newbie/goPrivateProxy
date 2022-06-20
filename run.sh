@@ -14,4 +14,13 @@ docker build -t ${group_name}/${app_name} .
 #构建docker应用
 docker run -p 8138:8138 --name ${app_name} \
 -e TZ="Asia/Shanghai" \
+--add-host=204.232.175.78:http://documentcloud.github.com
+--add-host=207.97.227.239:http://github.com
+--add-host=204.232.175.94:http://gist.github.com
+--add-host=107.21.116.220:http://help.github.com
+--add-host=207.97.227.252:http://nodeload.github.com
+--add-host=199.27.76.130:http://raw.github.com
+--add-host=107.22.3.110:http://status.github.com
+--add-host=204.232.175.78:http://training.github.com
+--add-host=207.97.227.243:http://www.github.com
 -d ${group_name}/${app_name}
