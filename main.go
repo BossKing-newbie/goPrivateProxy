@@ -25,8 +25,10 @@ func main() {
 		Cacher: goproxy.DirCacher(*moduleCache),
 	}
 	r := gin.Default()
-	r.Use(gin.WrapH(goproxyHandler))
-	r.GET("/ping", func(c *gin.Context) {
+	goProxy := r.Group("/")
+	goProxy.Use(gin.WrapH(goproxyHandler))
+	ginWeb := r.Group("/api")
+	ginWeb.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",
 		})
