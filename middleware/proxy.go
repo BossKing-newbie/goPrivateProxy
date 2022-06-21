@@ -6,6 +6,7 @@ import (
 	"github.com/goproxy/goproxy"
 	"go_private_proxy/constant"
 	"golang.org/x/mod/module"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -41,30 +42,34 @@ func InitializationGoProxy() gin.HandlerFunc {
 		}
 		GetProxy().ServeHTTP(c.Writer, c.Request)
 		name = strings.TrimPrefix(path.Clean(name), "/")
-		fmt.Println("name:", name)
-		getGoproxyCacheName(name)
+		/*200意指download success计入统计范围*/
+		if c.Writer.Status() == 200 {
+			if validate, moduleV, mod := isStatistics(name); validate {
+				fmt.Println(mod, " 版本:", moduleV)
+			}
+		}
 	}
 }
 
-func getGoproxyCacheName(name string) {
+/*是否属于版本下载行为*/
+func isStatistics(name string) (validate bool, version string, mod string) {
 	nameParts := strings.Split(name, "/@v/")
 	if len(nameParts) != 2 {
-		fmt.Println(nameParts)
+		return false, "", ""
 	}
 
-	if _, err := module.UnescapePath(nameParts[0]); err != nil {
-		fmt.Println(err)
-	}
-
-	nameBase := path.Base(name)
-	nameExt := path.Ext(nameBase)
-	fmt.Println("nameBase:", nameBase)
-	fmt.Println("nameExt:", nameExt)
-	escapedModuleVersion := strings.TrimSuffix(nameBase, nameExt)
-	moduleVersion, err := module.UnescapeVersion(escapedModuleVersion)
-	fmt.Println("version", moduleVersion)
+	par, err := module.UnescapePath(nameParts[0])
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
+		return false, "", ""
 	}
-
+	/*获取后缀*/
+	version = path.Base(name)
+	if strings.Contains(version, "list") {
+		return false, "", ""
+	}
+	if strings.Contains(version, ".zip") {
+		return true, version, par
+	}
+	return false, "", ""
 }
