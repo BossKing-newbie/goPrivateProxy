@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"path"
 	"strings"
 )
 
@@ -38,8 +37,10 @@ func InitializationGoProxy() gin.HandlerFunc {
 			)
 			c.Status(http.StatusNotFound)
 		}
-		if path.Ext(name) != ".zip" {
-			GetProxy().ServeHTTP(c.Writer, c.Request)
+		GetProxy().ServeHTTP(c.Writer, c.Request)
+		uries := strings.Split(name, "/")
+		for _, uri := range uries {
+			fmt.Print(uri)
 		}
 	}
 }

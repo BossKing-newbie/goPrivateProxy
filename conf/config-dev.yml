@@ -1,0 +1,2 @@
+module:
+  cache: '/go/modules'
