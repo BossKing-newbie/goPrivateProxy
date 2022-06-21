@@ -23,7 +23,8 @@ steps:
   -  name: build-start
      image: appleboy/drone-ssh # SSH工具镜像
      settings:
-       host: 121.196.150.116 # 远程连接地址
+       host:
+         from_secret: server_ip
        username: root # 远程连接账号
        password:
          from_secret: ssh_password # 从Secret中读取SSH密码

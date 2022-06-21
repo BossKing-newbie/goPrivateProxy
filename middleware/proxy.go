@@ -1,12 +1,18 @@
 package middleware
 
 import (
+	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/goproxy/goproxy"
 	"go_private_proxy/constant"
+	"net/http"
+	"net/url"
 	"os"
+	"path"
+	"strings"
 )
 
-func InitializationProxy() *goproxy.Goproxy {
+func GetProxy() *goproxy.Goproxy {
 	/*继承了http.handler*/
 	proxy := &goproxy.Goproxy{
 		GoBinEnv: append(
@@ -19,4 +25,21 @@ func InitializationProxy() *goproxy.Goproxy {
 		Cacher: goproxy.DirCacher(*constant.ModuleCache),
 	}
 	return proxy
+}
+
+/*自定义中间件*/
+func InitializationGoProxy() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		name, err := url.PathUnescape(c.Request.URL.Path)
+		if err != nil || strings.HasSuffix(name, "/") {
+			c.Header(
+				"Cache-Control",
+				fmt.Sprintf("public, max-age=%d", 86400),
+			)
+			c.Status(http.StatusNotFound)
+		}
+		if path.Ext(name) != ".zip" {
+			GetProxy().ServeHTTP(c.Writer, c.Request)
+		}
+	}
 }

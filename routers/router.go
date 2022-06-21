@@ -8,11 +8,10 @@ import (
 
 func InitializationRouter() *gin.Engine {
 	r := gin.Default()
-	/*proxy模块*/
-	goProxy := r.Group("/")
-	goProxy.Use(gin.WrapH(middleware.InitializationProxy()))
 	/*api模块*/
 	webApi := r.Group("/api")
 	webApi.GET("/ping", api.TestApi)
+	/*proxy模块*/
+	r.Use(middleware.InitializationGoProxy())
 	return r
 }
