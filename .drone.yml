@@ -20,7 +20,7 @@ steps:
        - cp app /goPrivateProxy/app
        - cp run.sh /goPrivateProxy/run.sh
        - cp Dockerfile /goPrivateProxy/Dockerfile
-       - cp -r /conf /goPrivateProxy
+       - cp -r conf /goPrivateProxy
   -  name: build-start
      image: appleboy/drone-ssh # SSH工具镜像
      settings:

@@ -5,9 +5,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/goproxy/goproxy"
 	"go_private_proxy/constant"
+	"golang.org/x/mod/module"
 	"net/http"
 	"net/url"
 	"os"
+	"path"
 	"strings"
 )
 
@@ -21,7 +23,7 @@ func GetProxy() *goproxy.Goproxy {
 		ProxiedSUMDBs: []string{
 			"sum.golang.org https://goproxy.cn/sumdb/sum.golang.org", // 代理默认的校验和数据库
 		},
-		Cacher: goproxy.DirCacher(*constant.ModuleCache),
+		Cacher: goproxy.DirCacher(constant.GetYml().GetString("module.cache")),
 	}
 	return proxy
 }
@@ -38,9 +40,31 @@ func InitializationGoProxy() gin.HandlerFunc {
 			c.Status(http.StatusNotFound)
 		}
 		GetProxy().ServeHTTP(c.Writer, c.Request)
-		uries := strings.Split(name, "/")
-		for _, uri := range uries {
-			fmt.Print(uri)
-		}
+		name = strings.TrimPrefix(path.Clean(name), "/")
+		fmt.Println("name:", name)
+		getGoproxyCacheName(name)
 	}
+}
+
+func getGoproxyCacheName(name string) {
+	nameParts := strings.Split(name, "/@v/")
+	if len(nameParts) != 2 {
+		fmt.Println(nameParts)
+	}
+
+	if _, err := module.UnescapePath(nameParts[0]); err != nil {
+		fmt.Println(err)
+	}
+
+	nameBase := path.Base(name)
+	nameExt := path.Ext(nameBase)
+	fmt.Println("nameBase:", nameBase)
+	fmt.Println("nameExt:", nameExt)
+	escapedModuleVersion := strings.TrimSuffix(nameBase, nameExt)
+	moduleVersion, err := module.UnescapeVersion(escapedModuleVersion)
+	fmt.Println("version", moduleVersion)
+	if err != nil {
+		fmt.Println(err)
+	}
+
 }
