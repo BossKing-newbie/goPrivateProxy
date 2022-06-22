@@ -13,9 +13,7 @@ steps:
        - go env -w GO111MODULE=on
        - go mod tidy
        - go version
-       - ls
        - go build -o app main.go
-       - ls
        - pwd
        - cp app /goPrivateProxy/app
        - cp run.sh /goPrivateProxy/run.sh

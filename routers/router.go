@@ -12,6 +12,7 @@ func InitializationRouter() *gin.Engine {
 	webApi := r.Group("/api")
 	webApi.GET("/module", api.ModuleApi)
 	webApi.GET("/version", api.ModuleVersionApi)
+	webApi.GET("/fileTree", api.CacheFileTreeApi)
 	/*proxy模块*/
 	r.Use(middleware.InitializationGoProxy())
 	return r

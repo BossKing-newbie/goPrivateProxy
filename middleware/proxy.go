@@ -73,6 +73,8 @@ func isStatistics(name string) (validate bool, version string, mod string) {
 	}
 	return false, "", ""
 }
+
+//统计go mod下载次数
 func statisticDownloadNum(key string) {
 	if constant.GetConcurrentMap().Has(key) {
 		num, _ := constant.GetConcurrentMap().Get(key)

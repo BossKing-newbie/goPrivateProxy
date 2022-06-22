@@ -1,16 +1,15 @@
 package constant
 
 import (
-	"flag"
 	"fmt"
 	cmap "github.com/orcaman/concurrent-map"
 	"github.com/spf13/viper"
 	"log"
 	"sync"
+	"time"
 )
 
-var ModuleCache = flag.String("m", "/go/modules", "the module cache dir")
-
+var timeFormat = "2006/01/02 15:04:05"
 var (
 	dMapSingleton sync.Once
 	dMap          cmap.ConcurrentMap //下载统计map
@@ -62,4 +61,7 @@ func GetYml() *viper.Viper {
 		yml = readYml()
 	})
 	return yml
+}
+func GetFormatTime(t time.Time) string {
+	return t.Format(timeFormat)
 }
