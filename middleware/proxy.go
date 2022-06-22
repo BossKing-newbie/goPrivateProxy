@@ -44,8 +44,8 @@ func InitializationGoProxy() gin.HandlerFunc {
 		name = strings.TrimPrefix(path.Clean(name), "/")
 		/*200意指download success计入统计范围*/
 		if c.Writer.Status() == 200 {
-			if validate, moduleV, mod := isStatistics(name); validate {
-				fmt.Println(mod, " 版本:", moduleV)
+			if validate, moduleV, mod := isStatistics(name); validate && len(mod) > 0 && len(moduleV) > 0 {
+				statisticDownloadNum(mod + ":" + moduleV)
 			}
 		}
 	}
@@ -69,7 +69,17 @@ func isStatistics(name string) (validate bool, version string, mod string) {
 		return false, "", ""
 	}
 	if strings.Contains(version, ".zip") {
-		return true, version, par
+		return true, strings.ReplaceAll(version, ".zip", ""), par
 	}
 	return false, "", ""
+}
+func statisticDownloadNum(key string) {
+	if constant.GetConcurrentMap().Has(key) {
+		num, _ := constant.GetConcurrentMap().Get(key)
+		count := num.(int64) + 1
+		constant.GetConcurrentMap().Set(key, count)
+	} else {
+		var initCount int64 = 1
+		constant.GetConcurrentMap().Set(key, initCount)
+	}
 }

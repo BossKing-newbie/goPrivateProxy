@@ -12,8 +12,8 @@ import (
 var ModuleCache = flag.String("m", "/go/modules", "the module cache dir")
 
 var (
-	cMapSingleton sync.Once
-	cMap          cmap.ConcurrentMap
+	dMapSingleton sync.Once
+	dMap          cmap.ConcurrentMap //下载统计map
 	yml           *viper.Viper
 	ymlSingleton  sync.Once
 )
@@ -23,10 +23,10 @@ func initMap() cmap.ConcurrentMap {
 	return m
 }
 func GetConcurrentMap() cmap.ConcurrentMap {
-	cMapSingleton.Do(func() {
-		cMap = initMap()
+	dMapSingleton.Do(func() {
+		dMap = initMap()
 	})
-	return cMap
+	return dMap
 }
 
 // 读取yaml文件
