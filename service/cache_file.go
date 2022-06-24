@@ -16,6 +16,10 @@ type FileCacheInfo struct {
 	ParentId int             `json:"parentId"`
 	Child    []FileCacheInfo `json:"child"`
 }
+type DownloadModel struct {
+	Path  string `json:"path"`
+	IsDir bool   `json:"isDir"`
+}
 
 /*生成文件树*/
 func ListFileCache(dirName string, parentId int) []FileCacheInfo {
