@@ -8,6 +8,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
+	"strings"
 )
 
 func ModuleVersionApi(c *gin.Context) {
@@ -29,7 +31,7 @@ func DownloadFile(c *gin.Context) {
 	//打开文件
 	file, errByOpenFile := os.Open(downloadModel.Path)
 	//非空处理
-	if errByOpenFile != nil {
+	if !strings.Contains(downloadModel.Path, constant.GetYml().GetString("module.cache")) || errByOpenFile != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"success": false,
 			"message": "失败",
@@ -39,10 +41,15 @@ func DownloadFile(c *gin.Context) {
 	reader := file
 	fi, _ := file.Stat()
 	contentLength := fi.Size()
-	contentType := "application/octet-stream"
-	fileVal := fmt.Sprintf("attachment; filename=%s", file.Name())
+	extName := filepath.Ext(downloadModel.Path)
+	log.Println("下载文件后缀名", extName)
+	contentType := constant.BaseContentType[extName]
+	log.Println("contentType:", contentType)
+	fileVal := fmt.Sprintf("attachment; filename=%s", fi.Name())
 	extraHeaders := map[string]string{
-		"Content-Disposition": fileVal,
+		"Content-Disposition":       fileVal,
+		"Content-Type":              "application/octet-stream",
+		"Content-Transfer-Encoding": "binary",
 	}
 
 	c.DataFromReader(http.StatusOK, contentLength, contentType, reader, extraHeaders)
