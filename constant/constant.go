@@ -237,6 +237,7 @@ var BaseContentType = map[string]string{
 	".jad":         "text/vnd.sun.j2me.app-descriptor",
 	".jar":         "application/x-java-archive",
 	".java":        "text/x-java",
+	".info":        "text/x-info",
 	".jng":         "image/x-jng",
 	".jnlp":        "application/x-java-jnlp-file",
 	".jp2":         "image/jp2",
